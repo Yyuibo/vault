@@ -100,6 +100,6 @@ int main(int argc, char** argv) {
     }
     
 
-    // emp::finalize_semi_honest();
+    emp::finalize_semi_honest();
 
 }
