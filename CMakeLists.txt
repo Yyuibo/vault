@@ -31,7 +31,7 @@ if(OPENSSL_FOUND)
    message(STATUS "Using OPENSSL ${OPENSSL_VERSION}")
 endif()
 
-# include .h file = g++ -l
+# include .h file = g++ -I
 include_directories("${PROJECT_SOURCE_DIR}/src")
 
 # link directories of library = g++ -L
