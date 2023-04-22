@@ -17,7 +17,7 @@ endif()
 
 # seal
 # for ubuntu
-SET(SEAL_DIR "/home/ubuntu/project1/SEAL/build/cmake")
+SET(SEAL_DIR "${PROJECT_SOURCE_DIR}/deps/SEAL/build/cmake")
 find_package(SEAL REQUIRED)
 if(SEAL_FOUND)
     message(STATUS "Using SEAL ${SEAL_VERSION}")
