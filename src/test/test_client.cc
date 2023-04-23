@@ -1,22 +1,58 @@
 #include <iostream>
 #include <cstddef>
 #include <fstream>
-#include <map>
+#include <algorithm>
+#include <vector>
 #include "encode/encode.h"
 #include "key_binding_and_retrieval/polynomials.h"
 
 using namespace std;
 
-std::vector<std::vector<uint8_t>> pos;
-void sour(uint8_t t, uint8_t n, std::vector<uint8_t> pos_sub) {
-    if (t == 0 || n == 0) {
-        if (t == 0) pos.push_back(pos_sub);
-        return;
+bool isDone(int t, int n, std::vector<bool> index) {
+    for (int i = n - 1; i >= n - t; i--) {
+        if (!index[i])  return false;
     }
-    sour(t, n - 1, pos_sub);
-    pos_sub.push_back(n);
-    sour(t - 1, n - 1, pos_sub);
+    return true;
 }
+
+void Combination(int t, int n, std::vector<std::vector<uint8_t>> &pos) {
+    std::vector<bool> index(n, false);
+    for (int i = 0; i < t; i++) {
+        index[i] = true;
+    }
+    while (!isDone(t, n, index)) {
+        for (int i = 0; i < n - 1; i++) {
+            if (index[i] && !index[i + 1]) {
+                index[i] = false;
+                index[i + 1] = true;
+
+                int count = 0;
+                for (int j = 0; j < i; j++) {
+                    if (index[j]) {
+                        index[j] = false;
+                        index[count++] = true;
+                    }
+                }
+                std::vector<uint8_t> pos1;
+                for (int j = 0; j < n; j++) {
+                    if (index[j])   pos1.push_back(j);
+                }
+                pos.push_back(pos1);
+                break;
+            }
+        }
+    }
+}
+
+// void sour(uint8_t t, uint8_t n, std::vector<uint8_t> pos_sub) {
+//     if (t == 0 || n == 0) {
+//         if (t == 0) pos.push_back(pos_sub);
+//         return;
+//     }
+//     sour(t, n - 1, pos_sub);
+//     pos_sub.push_back(n);
+//     sour(t - 1, n - 1, pos_sub);
+// }
 
 int main(int argc, char** argv) {
     std::string file = "../src/encode/embedding_vector_1.txt";
@@ -36,20 +72,22 @@ int main(int argc, char** argv) {
 
     
     // // retrieval (t n)
-    int t = 4;
+    int t = 15;
     uint64_t modulus = 8519681;
-    std::vector<uint8_t> pos_sub;
-    sour(t, P.size(), pos_sub);
-    std::vector<uint32_t> x;
-    std::vector<uint32_t> y;
-    for (int i = 0; i < pos.size(); i++) {
-        // Cmn
-        x.clear();
-        y.clear();
-        for (int j = 0; j < t; j++) {
-            x.push_back(P[pos[i][j]]);
-            y.push_back(calculate_poly(coeff_V, x[j]));
-            // cout << (int)pos[i][j] << endl; 
+    // init index = {000000...11111}
+    std::vector<int> index(P.size() - t, 0);
+    for (int i = 0; i < t; i++) {
+        index.push_back(1);
+    }
+    do {
+        std::vector<uint32_t> x;
+        std::vector<uint32_t> y;
+        std::vector<uint8_t> pos;
+        for (int i = 0; i < index.size(); i++) {
+            if (index[i] == 1) {
+                x.push_back(P[i]);
+                y.push_back(calculate_poly(coeff_V, x.back()));
+            }
         }
         std::vector<uint64_t> coeff_k;
         polynomial_from_points(x, y, coeff_k, (uint32_t)modulus);
@@ -58,23 +96,6 @@ int main(int argc, char** argv) {
             cout << "Party: Client; Key retrieval: 0x" << coeff_k[0] << endl;
             break;
         }
-    }
-    // for (int i = 0; i < P.size() - 1; i++) {
-    //     x.clear();
-    //     y.clear();
-    //     x.push_back(P[i]);
-    //     y.push_back(calculate_poly(coeff_V, x[0]));
-    //     for (int j = i + 1; j < P.size(); j++) {
-    //         x.push_back(P[j]);
-    //         y.push_back(calculate_poly(coeff_V, x[1]));
+    } while (next_permutation(index.begin(), index.end()));
 
-    //         std::vector<uint64_t> coeff_k;
-    //         polynomial_from_points(x, y, coeff_k, 8519681);
-    //         if (coeff_k[0] & 0x00 == 0) {
-    //             cout << "key retrieval: " << coeff_k[0] << endl;
-    //             return 0;
-    //         }
-    //     }
-        
-    // }
 }

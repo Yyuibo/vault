@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
     GetEncodeRes(file, P);
     
     // the secret polynomial κ of degree smaller than k
-    int t = 4;
+    int t = 15;
     uint64_t modulus = 8519681;
     std::vector<uint64_t> coeff_k(t, 0);
     srand((unsigned)time(NULL));
