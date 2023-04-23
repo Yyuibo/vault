@@ -15,14 +15,6 @@ if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
    SET(CMAKE_BUILD_TYPE Release)
 endif()
 
-# openssl
-# for ubuntu
-find_package(PkgConfig REQUIRED)
-pkg_search_module(OPENSSL REQUIRED openssl)
-if(OPENSSL_FOUND)
-   message(STATUS "Using OPENSSL ${OPENSSL_VERSION}")
-endif()
-
 # include .h file = g++ -I
 include_directories("${PROJECT_SOURCE_DIR}/src")
 
