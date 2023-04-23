@@ -15,14 +15,6 @@ if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
    SET(CMAKE_BUILD_TYPE Release)
 endif()
 
-# seal
-# for ubuntu
-SET(SEAL_DIR "${PROJECT_SOURCE_DIR}/deps/SEAL/build/cmake")
-find_package(SEAL REQUIRED)
-if(SEAL_FOUND)
-    message(STATUS "Using SEAL ${SEAL_VERSION}")
-endif()
-
 # openssl
 # for ubuntu
 find_package(PkgConfig REQUIRED)
@@ -45,5 +37,3 @@ add_executable(test_server src/test/test_server.cc ${source_encode} ${key_bindin
 add_executable(test_client src/test/test_client.cc ${source_encode} ${key_binding_and_retrieval})
 
 # target library
-target_link_libraries(test_server ${OPENSSL_LIBRARIES} libemp-tool.so SEAL::seal)
-target_link_libraries(test_client ${OPENSSL_LIBRARIES} libemp-tool.so SEAL::seal)
