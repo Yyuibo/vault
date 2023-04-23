@@ -3,7 +3,6 @@ project1
 
 ## Test and Deploy
 ```
-cd ..
 cmake -S . -B build
 cd build
 make
