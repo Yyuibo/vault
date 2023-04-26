@@ -16,7 +16,7 @@ def inference(img):
 
 if __name__ == '__main__':
     # client = 1; server = 2;
-    img = openImg('../img/angelina_jolie_0{party}.jpg'.format(party = sys.argv[1]))
+    img = openImg('../data/img/angelina_jolie_0{party}.jpg'.format(party = sys.argv[1]))
     img_embedding = inference(img).flatten()
 
     np.savetxt("./encode/embedding_vector_{party}.txt".format(party = sys.argv[1]), img_embedding)

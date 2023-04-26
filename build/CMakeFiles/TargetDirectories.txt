@@ -1,0 +1,4 @@
+/home/ubuntu/project1/project1/build/CMakeFiles/test_server.dir
+/home/ubuntu/project1/project1/build/CMakeFiles/test_client.dir
+/home/ubuntu/project1/project1/build/CMakeFiles/edit_cache.dir
+/home/ubuntu/project1/project1/build/CMakeFiles/rebuild_cache.dir
